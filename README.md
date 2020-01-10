@@ -1,11 +1,11 @@
 # Thinking Reactively with RxJS - Egghead.io Workshop
 
-##Pre-requisites
+### Pre-requisites
 
-#####Intro for beginners:
+##### Intro for beginners:
 [Introduction to Reactive Programming](https://egghead.io/courses/introduction-to-reactive-programming)
 
-#####Operators
+##### Operators
 
 [RxJS Beyond the Basics - Operators in Depth](https://egghead.io/courses/rxjs-beyond-the-basics-operators-in-depth)
 Highly recommended, it explains `scan`, `combineLatest`, `merge`, `startWith` and a few other operators we will use in the course
@@ -26,10 +26,10 @@ Operators we'll be using not covered in the above two courses:
 - [takeUntil](https://egghead.io/lessons/rxjs-stopping-a-stream-with-takeuntil)
 - [takeWhile](https://egghead.io/lessons/rxjs-completing-a-stream-with-takewhile)
 
-#####Promises
+##### Promises
 [Understanding the ES6 Promise API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 
-#####Bonus / Further learning
+##### Bonus / Further learning
 
 All around incredibly good course around higher order observables and different merging strategies in RxJS:
 https://egghead.io/courses/use-higher-order-observables-in-rxjs-effectively
