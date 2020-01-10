@@ -2,6 +2,9 @@
 
 ### Pre-requisites
 
+**The main pre-requisite for this course is to have some experience with RxJS and its most popular operators.**
+All of the below operators and theory will be covered in the course as well, but given that they are not the focus of what we want to teach, we will not spend too much time on them. The more time you spend on the below, the easier it will be to solidify everything during the workshop.
+
 ##### Intro for beginners:
 [Introduction to Reactive Programming](https://egghead.io/courses/introduction-to-reactive-programming)
 
