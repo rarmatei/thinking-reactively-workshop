@@ -25,6 +25,7 @@ Operators we'll be using not covered in the above two courses:
 - [new Observable](https://egghead.io/lessons/rxjs-understand-the-rxjs-create-operator)
 - [takeUntil](https://egghead.io/lessons/rxjs-stopping-a-stream-with-takeuntil)
 - [takeWhile](https://egghead.io/lessons/rxjs-completing-a-stream-with-takewhile)
+- [exhaustMap](https://www.learnrxjs.io/operators/transformation/exhaustmap.html)
 
 #####Promises
 [Understanding the ES6 Promise API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
