@@ -1,10 +1,10 @@
 import React from "react";
 import { timer } from "rxjs";
-import { showLoadingStatus } from "../lesson-code/Extensions";
 import Button from "./presentational/Button";
+import {} from "../lesson-code/TaskProgressService";
 
-const slowObservable = timer(3000).pipe(showLoadingStatus());
-const verySlowObservable = timer(6000).pipe(showLoadingStatus());
+const slowObservable = timer(3000);
+const verySlowObservable = timer(6000);
 
 const doWork = () => {
   slowObservable.subscribe();

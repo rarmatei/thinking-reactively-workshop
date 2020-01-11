@@ -32,12 +32,7 @@ function onClick(text) {
 
 export default props => {
   return (
-    <IonButton
-      onClick={e => {
-        onClick(props.children);
-        props.onClick(e);
-      }}
-    >
+    <IonButton onClick={e => (onClick(props.children), props.onClick(e))}>
       {props.children}
     </IonButton>
   );
