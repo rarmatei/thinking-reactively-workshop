@@ -1,10 +1,4 @@
-import {
-  Observable,
-  merge,
-  Subject,
-  timer,
-  combineLatest
-} from "rxjs";
+import { Observable, merge, Subject, timer, combineLatest } from "rxjs";
 import {
   mapTo,
   startWith,
@@ -16,10 +10,8 @@ import {
   takeUntil,
   switchMap,
   first
-} from 'rxjs/operators';
-import {
-  initLoadingSpinner
-} from "../services/LoadingSpinnerService";
+} from "rxjs/operators";
+import { initLoadingSpinner } from "../services/LoadingSpinnerService";
 
 const taskStarts = new Subject();
 const taskCompletions = new Subject();
@@ -60,9 +52,7 @@ const shouldHideWithDelay = combineLatest(
 );
 
 shouldShowWithDelay
-  .pipe(
-    switchMap(() => displaySpinner.pipe(takeUntil(shouldHideWithDelay)))
-  )
+  .pipe(switchMap(() => displaySpinner().pipe(takeUntil(shouldHideWithDelay))))
   .subscribe();
 
 function displaySpinner(total, loaded) {

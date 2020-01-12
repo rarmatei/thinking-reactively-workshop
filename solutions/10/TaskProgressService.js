@@ -1,28 +1,20 @@
-import {
-  Observable,
-  merge,
-  Subject,
-  timer,
-  combineLatest
-} from "rxjs";
+import { Observable, merge, Subject, timer, combineLatest } from "rxjs";
 import {
   mapTo,
+  scan,
   startWith,
   distinctUntilChanged,
   shareReplay,
-  scan,
-  filter,
   pairwise,
-  takeUntil,
+  filter,
   switchMap,
+  takeUntil,
   first
-} from 'rxjs/operators';
-import {
-  initLoadingSpinner
-} from "../services/LoadingSpinnerService";
-import {
-  keyCombo
-} from "./EventCombo";
+} from "rxjs/operators";
+import { initLoadingSpinner } from "../services/LoadingSpinnerService";
+import { keyCombo } from "./EventCombo";
+
+export default {};
 
 const taskStarts = new Subject();
 const taskCompletions = new Subject();
@@ -42,12 +34,12 @@ const currentLoadCount = loadVariations.pipe(
   shareReplay(1)
 );
 
-const shouldHideSpinner = currentLoadCount.pipe(filter(count => count === 0));
-
 const shouldShowSpinner = currentLoadCount.pipe(
   pairwise(),
   filter(([prev, curr]) => curr === 1 && prev === 0)
 );
+
+const shouldHideSpinner = currentLoadCount.pipe(filter(count => count === 0));
 
 const flashThresholdMs = 2000;
 
@@ -64,17 +56,17 @@ const shouldHideWithDelay = combineLatest(
 
 const loadCounter = currentLoadCount.pipe(
   scan(
-    ({
-      loaded,
-      previousLoadingCount
-    }, currentLoadingCount) => {
-      const currentlyLoaded = currentLoadingCount < previousLoadingCount ? loaded + 1 : loaded;
+    ({ loaded, previousLoadingCount }, currentLoadingCount) => {
+      //TODO maybe think about the names in here
+      const currentlyLoaded =
+        currentLoadingCount < previousLoadingCount ? loaded + 1 : loaded;
       return {
-        loaded: loaded,
-        max: loaded + currentLoadingCount,
+        loaded: currentlyLoaded,
+        max: currentLoadingCount + currentlyLoaded,
         previousLoadingCount: currentLoadingCount
       };
-    }, {
+    },
+    {
       loaded: 0,
       max: 0,
       previousLoadingCount: 0
@@ -90,7 +82,8 @@ const disableSpinnerCombo = keyCombo(["a", "s", "d"]);
 
 shouldShowWithDelay
   .pipe(
-    switchMap(() => spinner.pipe(takeUntil(shouldHideWithDelay)))
+    switchMap(() => spinner.pipe(takeUntil(shouldHideWithDelay))),
+    takeUntil(disableSpinnerCombo)
   )
   .subscribe();
 
@@ -104,12 +97,10 @@ function displaySpinner(total, loaded) {
   });
 }
 
-function newTaskStarted() {
+export function newTaskStarted() {
   taskStarts.next();
 }
 
-function existingTaskCompleted() {
+export function existingTaskCompleted() {
   taskCompletions.next();
 }
-
-export default {};

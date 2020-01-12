@@ -1,7 +1,4 @@
-import {
-  Observable,
-  merge
-} from "rxjs";
+import { Observable, merge } from "rxjs";
 import {
   mapTo,
   startWith,
@@ -12,7 +9,7 @@ import {
   pairwise,
   takeUntil,
   switchMap
-} from 'rxjs/operators';
+} from "rxjs/operators";
 
 const taskStarts = new Observable();
 const taskCompletions = new Observable();
@@ -33,7 +30,6 @@ const currentLoadCount = loadVariations.pipe(
   shareReplay(1)
 );
 
-
 const shouldHideSpinner = currentLoadCount.pipe(filter(count => count === 0));
 
 const shouldShowSpinner = currentLoadCount.pipe(
@@ -42,9 +38,7 @@ const shouldShowSpinner = currentLoadCount.pipe(
 );
 
 shouldShowSpinner
-  .pipe(
-    switchMap(() => displaySpinner.pipe(takeUntil(shouldHideSpinner)))
-  )
+  .pipe(switchMap(() => displaySpinner.pipe(takeUntil(shouldHideSpinner))))
   .subscribe();
 
 export default {};

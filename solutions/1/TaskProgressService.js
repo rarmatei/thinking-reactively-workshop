@@ -23,6 +23,6 @@ data sources:
 
 const taskStarts = new Observable();
 const taskCompletions = new Observable();
-const showSpinner = new Observable();
+const displaySpinner = new Observable();
 
 export default {};
