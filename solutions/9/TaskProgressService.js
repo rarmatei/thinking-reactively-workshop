@@ -1,30 +1,25 @@
 import {
   Observable,
-  Subject,
   merge,
+  Subject,
   timer,
   combineLatest
 } from "rxjs";
 import {
   mapTo,
-  scan,
-  map,
-  switchMap,
-  distinctUntilChanged,
   startWith,
+  distinctUntilChanged,
+  shareReplay,
+  scan,
   filter,
   pairwise,
   takeUntil,
-  first,
-  shareReplay
-} from "rxjs/operators";
-
+  switchMap,
+  first
+} from 'rxjs/operators';
 import {
   initLoadingSpinner
 } from "../services/LoadingSpinnerService";
-import {
-  keyCombo
-} from "./EventCombo";
 
 const taskStarts = new Subject();
 const taskCompletions = new Subject();
@@ -88,12 +83,9 @@ const spinner = loadCounter.pipe(
   switchMap(stats => displaySpinner(stats.max, stats.loaded))
 );
 
-const disableSpinnerCombo = keyCombo(["a", "s", "d"]);
-
 shouldShowWithDelay
   .pipe(
-    switchMap(() => spinner.pipe(takeUntil(shouldHideWithDelay))),
-    takeUntil(disableSpinnerCombo)
+    switchMap(() => spinner.pipe(takeUntil(shouldHideWithDelay)))
   )
   .subscribe();
 
@@ -107,11 +99,11 @@ function displaySpinner(total, loaded) {
   });
 }
 
-export function newTaskStarted() {
+function newTaskStarted() {
   taskStarts.next();
 }
 
-export function existingTaskCompleted() {
+function existingTaskCompleted() {
   taskCompletions.next();
 }
 
