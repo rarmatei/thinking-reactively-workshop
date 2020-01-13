@@ -1,9 +1,9 @@
 import React from "react";
+import { PromiseWithLoadingProgress } from "../lesson-code/Extensions";
 import Button from "./presentational/Button";
-import {} from "../lesson-code/TaskProgressService";
 
 const doVeryQuickWork = () => {
-  new Promise(resolve => {
+  new PromiseWithLoadingProgress(resolve => {
     setTimeout(() => {
       resolve();
     }, 300);
@@ -11,7 +11,7 @@ const doVeryQuickWork = () => {
 };
 
 const doAlmostQuickWork = () => {
-  new Promise(resolve => {
+  new PromiseWithLoadingProgress(resolve => {
     setTimeout(() => {
       resolve();
     }, 2200);
