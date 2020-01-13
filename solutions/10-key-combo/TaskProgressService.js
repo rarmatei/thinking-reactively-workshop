@@ -57,7 +57,6 @@ const shouldHideWithDelay = combineLatest(
 const loadCounter = currentLoadCount.pipe(
   scan(
     ({ loaded, previousLoadingCount }, currentLoadingCount) => {
-      //TODO maybe think about the names in here
       const currentlyLoaded =
         currentLoadingCount < previousLoadingCount ? loaded + 1 : loaded;
       return {

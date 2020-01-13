@@ -10,7 +10,6 @@ const doVeryQuickWork = () => {
   new Promise(resolve => {
     setTimeout(() => {
       existingTaskCompleted();
-      //TODO change this to contain callback
       resolve();
     }, 300);
   });
