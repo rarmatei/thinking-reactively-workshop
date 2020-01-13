@@ -28,8 +28,8 @@ const doAlmostQuickWork = () => {
 const SlowExample = () => {
   return (
     <>
-      <Button onClick={doVeryQuickWork}> QUICK task - 300 ms</Button>{" "}
-      <Button onClick={doAlmostQuickWork}> Almost quick task - 2200ms</Button>{" "}
+      <Button onClick={doVeryQuickWork}>QUICK task - 300ms</Button>
+      <Button onClick={doAlmostQuickWork}>Almost quick task - 2200ms</Button>
     </>
   );
 };

@@ -1,14 +1,14 @@
 import { Observable, merge } from "rxjs";
 import {
   mapTo,
+  scan,
   startWith,
   distinctUntilChanged,
   shareReplay,
-  scan,
   filter,
   pairwise,
-  takeUntil,
-  switchMap
+  switchMap,
+  takeUntil
 } from "rxjs/operators";
 
 const taskStarts = new Observable();

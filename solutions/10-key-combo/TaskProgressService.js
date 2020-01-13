@@ -5,16 +5,14 @@ import {
   startWith,
   distinctUntilChanged,
   shareReplay,
-  pairwise,
   filter,
+  pairwise,
   switchMap,
   takeUntil,
   first
 } from "rxjs/operators";
 import { initLoadingSpinner } from "../services/LoadingSpinnerService";
 import { keyCombo } from "./EventCombo";
-
-export default {};
 
 const taskStarts = new Subject();
 const taskCompletions = new Subject();
@@ -34,12 +32,12 @@ const currentLoadCount = loadVariations.pipe(
   shareReplay(1)
 );
 
+const shouldHideSpinner = currentLoadCount.pipe(filter(count => count === 0));
+
 const shouldShowSpinner = currentLoadCount.pipe(
   pairwise(),
   filter(([prev, curr]) => curr === 1 && prev === 0)
 );
-
-const shouldHideSpinner = currentLoadCount.pipe(filter(count => count === 0));
 
 const flashThresholdMs = 2000;
 
@@ -56,25 +54,25 @@ const shouldHideWithDelay = combineLatest(
 
 const loadCounter = currentLoadCount.pipe(
   scan(
-    ({ loaded, previousLoadingCount }, currentLoadingCount) => {
-      const currentlyLoaded =
-        currentLoadingCount < previousLoadingCount ? loaded + 1 : loaded;
+    ({ completed, loading }, loadingUpdate) => {
+      const completedUpdate =
+        loadingUpdate < loading ? completed + 1 : completed;
       return {
-        loaded: currentlyLoaded,
-        max: currentLoadingCount + currentlyLoaded,
-        previousLoadingCount: currentLoadingCount
+        completed: completedUpdate,
+        loading: loadingUpdate,
+        max: loadingUpdate + completedUpdate
       };
     },
     {
-      loaded: 0,
+      completed: 0,
       max: 0,
-      previousLoadingCount: 0
+      loading: 0
     }
   )
 );
 
 const spinner = loadCounter.pipe(
-  switchMap(stats => displaySpinner(stats.max, stats.loaded))
+  switchMap(stats => displaySpinner(stats.max, stats.completed))
 );
 
 const disableSpinnerCombo = keyCombo(["a", "s", "d"]);
@@ -103,3 +101,5 @@ export function newTaskStarted() {
 export function existingTaskCompleted() {
   taskCompletions.next();
 }
+
+export default {};

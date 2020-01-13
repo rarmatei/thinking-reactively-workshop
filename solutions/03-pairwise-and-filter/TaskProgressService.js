@@ -1,16 +1,13 @@
-import {
-  Observable,
-  merge
-} from "rxjs";
+import { Observable, merge } from "rxjs";
 import {
   mapTo,
+  scan,
   startWith,
   distinctUntilChanged,
   shareReplay,
-  scan,
   filter,
   pairwise
-} from 'rxjs/operators';
+} from "rxjs/operators";
 
 const taskStarts = new Observable();
 const taskCompletions = new Observable();
@@ -30,7 +27,6 @@ const currentLoadCount = loadVariations.pipe(
   distinctUntilChanged(),
   shareReplay(1)
 );
-
 
 const shouldHideSpinner = currentLoadCount.pipe(filter(count => count === 0));
 

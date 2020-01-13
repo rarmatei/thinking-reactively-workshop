@@ -1,6 +1,4 @@
-import {
-  Observable
-} from "rxjs";
+import { Observable } from "rxjs";
 
 /*
 when the loader needs to show

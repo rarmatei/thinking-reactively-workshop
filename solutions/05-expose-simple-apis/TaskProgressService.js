@@ -1,14 +1,14 @@
 import { Observable, merge, Subject } from "rxjs";
 import {
   mapTo,
+  scan,
   startWith,
   distinctUntilChanged,
   shareReplay,
-  scan,
   filter,
   pairwise,
-  takeUntil,
-  switchMap
+  switchMap,
+  takeUntil
 } from "rxjs/operators";
 
 const taskStarts = new Subject();
@@ -41,11 +41,11 @@ shouldShowSpinner
   .pipe(switchMap(() => displaySpinner.pipe(takeUntil(shouldHideSpinner))))
   .subscribe();
 
-function newTaskStarted() {
+export function newTaskStarted() {
   taskStarts.next();
 }
 
-function existingTaskCompleted() {
+export function existingTaskCompleted() {
   taskCompletions.next();
 }
 

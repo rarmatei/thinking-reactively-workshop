@@ -1,14 +1,14 @@
 import { Observable, merge, Subject, timer, combineLatest } from "rxjs";
 import {
   mapTo,
+  scan,
   startWith,
   distinctUntilChanged,
   shareReplay,
-  scan,
   filter,
   pairwise,
-  takeUntil,
   switchMap,
+  takeUntil,
   first
 } from "rxjs/operators";
 import { initLoadingSpinner } from "../services/LoadingSpinnerService";
@@ -65,11 +65,11 @@ function displaySpinner(total, loaded) {
   });
 }
 
-function newTaskStarted() {
+export function newTaskStarted() {
   taskStarts.next();
 }
 
-function existingTaskCompleted() {
+export function existingTaskCompleted() {
   taskCompletions.next();
 }
 

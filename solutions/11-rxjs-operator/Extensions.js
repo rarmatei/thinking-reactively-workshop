@@ -1,23 +1,18 @@
-import {
-  Observable
-} from "rxjs";
-import {
-  taskStarted,
-  taskCompleted
-} from "./TaskProgressService";
+import { Observable } from "rxjs";
+import { newTaskStarted, existingTaskCompleted } from "./TaskProgressService";
 
 export function showLoadingStatus() {
   return source => {
     return new Observable(observer => {
-      taskStarted();
+      newTaskStarted();
       return source.subscribe({
         next: val => observer.next(val),
         error: err => {
-          taskCompleted();
+          existingTaskCompleted();
           observer.error(err);
         },
         complete: () => {
-          taskCompleted();
+          existingTaskCompleted();
           observer.complete();
         }
       });

@@ -1,14 +1,11 @@
-import {
-  Observable,
-  merge
-} from "rxjs";
+import { Observable, merge } from "rxjs";
 import {
   mapTo,
+  scan,
   startWith,
   distinctUntilChanged,
-  shareReplay,
-  scan
-} from 'rxjs/operators';
+  shareReplay
+} from "rxjs/operators";
 
 const taskStarts = new Observable();
 const taskCompletions = new Observable();

@@ -26,8 +26,8 @@ const doLongWork = () => {
 const SlowExample = () => {
   return (
     <>
-      <Button onClick={doWork}>Start slow task - 3s</Button>{" "}
-      <Button onClick={doLongWork}>Start very slow task - 6s</Button>{" "}
+      <Button onClick={doWork}>Start slow task - 3s</Button>
+      <Button onClick={doLongWork}>Start very slow task - 6s</Button>
     </>
   );
 };
