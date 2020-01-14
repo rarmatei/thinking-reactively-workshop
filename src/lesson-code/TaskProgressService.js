@@ -1,4 +1,4 @@
-import { Observable, merge, Subject, timer } from "rxjs";
+import { Observable, merge, Subject, timer, combineLatest } from "rxjs";
 import {
   mapTo,
   scan,
@@ -8,7 +8,8 @@ import {
   filter,
   pairwise,
   switchMap,
-  takeUntil
+  takeUntil,
+  first
 } from "rxjs/operators";
 import { initLoadingSpinner } from "../services/LoadingSpinnerService";
 
@@ -37,14 +38,21 @@ const shouldShowSpinner = currentLoadCount.pipe(
   filter(([prev, curr]) => curr === 1 && prev === 0)
 );
 
+const flashThresholdMs = 2000;
+
 const shouldShowWithDelay = shouldShowSpinner.pipe(
   switchMap(() => {
-    return timer(2000).pipe(takeUntil(shouldHideSpinner));
+    return timer(flashThresholdMs).pipe(takeUntil(shouldHideSpinner));
   })
 );
 
+const shouldHideWithDelay = combineLatest(
+  shouldHideSpinner.pipe(first()),
+  timer(flashThresholdMs)
+);
+
 shouldShowWithDelay
-  .pipe(switchMap(() => displaySpinner().pipe(takeUntil(shouldHideSpinner))))
+  .pipe(switchMap(() => displaySpinner().pipe(takeUntil(shouldHideWithDelay))))
   .subscribe();
 
 function displaySpinner(total, loaded) {
