@@ -19,3 +19,20 @@ export function showLoadingStatus() {
     });
   };
 }
+
+export class PromiseWithLoadingProgress extends Promise {
+  constructor(executor) {
+    super((originalResolve, originalReject) => {
+      const resolve = (...args) => {
+        existingTaskCompleted();
+        return originalResolve(...args);
+      };
+      const reject = (...args) => {
+        existingTaskCompleted();
+        return originalReject(...args);
+      };
+      return executor(resolve, reject);
+    });
+    newTaskStarted();
+  }
+}
