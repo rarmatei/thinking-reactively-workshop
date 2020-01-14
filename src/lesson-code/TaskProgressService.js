@@ -1,4 +1,4 @@
-import { Observable, merge } from "rxjs";
+import { Observable, merge, Subject } from "rxjs";
 import {
   mapTo,
   scan,
@@ -11,8 +11,8 @@ import {
   takeUntil
 } from "rxjs/operators";
 
-const taskStarts = new Observable();
-const taskCompletions = new Observable();
+const taskStarts = new Subject();
+const taskCompletions = new Subject();
 const displaySpinner = new Observable();
 
 const loadUp = taskStarts.pipe(mapTo(1));
@@ -40,5 +40,13 @@ const shouldShowSpinner = currentLoadCount.pipe(
 shouldShowSpinner
   .pipe(switchMap(() => displaySpinner.pipe(takeUntil(shouldHideSpinner))))
   .subscribe();
+
+export function newTaskStarted() {
+  taskStarts.next();
+}
+
+export function existingTaskCompleted() {
+  taskCompletions.next();
+}
 
 export default {};
