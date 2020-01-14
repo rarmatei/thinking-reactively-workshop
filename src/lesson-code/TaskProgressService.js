@@ -51,8 +51,31 @@ const shouldHideWithDelay = combineLatest(
   timer(flashThresholdMs)
 );
 
+const loadingStats = currentLoadCount.pipe(
+  scan(
+    ({ completed, previousLoading }, loadingUpdate) => {
+      const loadsWentDown = loadingUpdate < previousLoading;
+      const currentCompleted = loadsWentDown ? completed + 1 : completed;
+      return {
+        completed: currentCompleted,
+        previousLoading: loadingUpdate,
+        total: currentCompleted + loadingUpdate
+      };
+    },
+    {
+      total: 0,
+      completed: 0,
+      previousLoading: 0
+    }
+  )
+);
+
+const spinner = loadingStats.pipe(
+  switchMap(({ total, completed }) => displaySpinner(total, completed))
+);
+
 shouldShowWithDelay
-  .pipe(switchMap(() => displaySpinner().pipe(takeUntil(shouldHideWithDelay))))
+  .pipe(switchMap(() => spinner.pipe(takeUntil(shouldHideWithDelay))))
   .subscribe();
 
 function displaySpinner(total, loaded) {
