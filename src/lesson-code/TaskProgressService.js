@@ -1,4 +1,4 @@
-import { Observable, merge, Subject } from "rxjs";
+import { Observable, merge, Subject, timer } from "rxjs";
 import {
   mapTo,
   scan,
@@ -37,7 +37,13 @@ const shouldShowSpinner = currentLoadCount.pipe(
   filter(([prev, curr]) => curr === 1 && prev === 0)
 );
 
-shouldShowSpinner
+const shouldShowWithDelay = shouldShowSpinner.pipe(
+  switchMap(() => {
+    return timer(2000).pipe(takeUntil(shouldHideSpinner));
+  })
+);
+
+shouldShowWithDelay
   .pipe(switchMap(() => displaySpinner().pipe(takeUntil(shouldHideSpinner))))
   .subscribe();
 
