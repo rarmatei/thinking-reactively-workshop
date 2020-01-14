@@ -6,7 +6,9 @@ import {
   distinctUntilChanged,
   shareReplay,
   filter,
-  pairwise
+  pairwise,
+  switchMap,
+  takeUntil
 } from "rxjs/operators";
 
 const taskStarts = new Observable();
@@ -34,5 +36,9 @@ const shouldShowSpinner = currentLoadCount.pipe(
   pairwise(),
   filter(([prev, curr]) => curr === 1 && prev === 0)
 );
+
+shouldShowSpinner
+  .pipe(switchMap(() => displaySpinner.pipe(takeUntil(shouldHideSpinner))))
+  .subscribe();
 
 export default {};
