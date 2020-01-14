@@ -4,7 +4,9 @@ import {
   scan,
   startWith,
   distinctUntilChanged,
-  shareReplay
+  shareReplay,
+  filter,
+  pairwise
 } from "rxjs/operators";
 
 const taskStarts = new Observable();
@@ -24,6 +26,13 @@ const currentLoadCount = loadVariations.pipe(
   startWith(0),
   distinctUntilChanged(),
   shareReplay(1)
+);
+
+const shouldHideSpinner = currentLoadCount.pipe(filter(count => count === 0));
+
+const shouldShowSpinner = currentLoadCount.pipe(
+  pairwise(),
+  filter(([prev, curr]) => curr === 1 && prev === 0)
 );
 
 export default {};
