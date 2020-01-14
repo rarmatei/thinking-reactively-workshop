@@ -12,6 +12,7 @@ import {
   first
 } from "rxjs/operators";
 import { initLoadingSpinner } from "../services/LoadingSpinnerService";
+import { keyCombo } from "./EventCombo";
 
 const taskStarts = new Subject();
 const taskCompletions = new Subject();
@@ -51,31 +52,36 @@ const shouldHideWithDelay = combineLatest(
   timer(flashThresholdMs)
 );
 
-const loadingStats = currentLoadCount.pipe(
+const loadCounter = currentLoadCount.pipe(
   scan(
-    ({ completed, previousLoading }, loadingUpdate) => {
-      const loadsWentDown = loadingUpdate < previousLoading;
-      const currentCompleted = loadsWentDown ? completed + 1 : completed;
+    ({ completed, loading }, loadingUpdate) => {
+      const completedUpdate =
+        loadingUpdate < loading ? completed + 1 : completed;
       return {
-        completed: currentCompleted,
-        previousLoading: loadingUpdate,
-        total: currentCompleted + loadingUpdate
+        completed: completedUpdate,
+        loading: loadingUpdate,
+        max: loadingUpdate + completedUpdate
       };
     },
     {
-      total: 0,
       completed: 0,
-      previousLoading: 0
+      max: 0,
+      loading: 0
     }
   )
 );
 
-const spinner = loadingStats.pipe(
-  switchMap(({ total, completed }) => displaySpinner(total, completed))
+const spinner = loadCounter.pipe(
+  switchMap(stats => displaySpinner(stats.max, stats.completed))
 );
 
+const disableSpinnerCombo = keyCombo(["a", "s", "d"]);
+
 shouldShowWithDelay
-  .pipe(switchMap(() => spinner.pipe(takeUntil(shouldHideWithDelay))))
+  .pipe(
+    switchMap(() => spinner.pipe(takeUntil(shouldHideWithDelay))),
+    takeUntil(disableSpinnerCombo)
+  )
   .subscribe();
 
 function displaySpinner(total, loaded) {
